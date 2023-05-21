@@ -3,10 +3,13 @@
 #include "memory.h"
 #include "fixedmath.h"
 #include "assets.h"
+#include "sync.h"
+
+int mosiac_scale = 0;
 
 void effect_sky_init()
 {
-  clear_screen(0);
+  clear_buffers(255);
 
   int i;
   for (i = 0; i < 256; i++)
@@ -17,6 +20,9 @@ void effect_sky_init()
 
     ((unsigned short*)0x5000000)[i] = (b << 10) | (g << 5) | r;
   }  
+
+  fast_set(uvtable, 0x00, 10 * 8 * 3);
+
 }
 
 void effect_sky_destroy()
@@ -27,7 +33,7 @@ void IWRAM_CODE raytrace_sky(uint16_t *target, uint16_t frame)
 {
   matrix3x3_t m;
 
-  rotate(m, 64, 64 + (cos((frame) << 1) >> 1), -(sin((frame) << 1) >> 1));
+  rotate(m, 0, 32 + (cos((frame) << 1) >> 1), -(sin((frame) << 1) >> 1));
 
   int u, v;
   int i, j;
@@ -83,7 +89,7 @@ void IWRAM_CODE raytrace_sky(uint16_t *target, uint16_t frame)
       iz = (oz + (dz * t)) >> 8;
 
       u = (int)(iz);
-      v = (int)((abs((int)(_atan2(iy, ix)))) >> 6);
+      v = (int)(_atan2(iy, ix) >> 5);
 
       t = (max(t1, t2)) >> 5;
 

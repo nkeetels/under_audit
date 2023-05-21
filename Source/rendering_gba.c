@@ -10,9 +10,15 @@
 #include "fixedmath.h"
 #include "assets.h"
 
-const uint16_t *texture_list[] = { tex_godwatbotBitmap, tex_subway1Bitmap, tex_subway2Bitmap,
-                                   tex_subway3Bitmap, tex_subway4Bitmap, tex_subway5Bitmap, tex_subway6Bitmap,
-                                   tex_litsphere2Bitmap, spr_logoBitmap };
+const uint16_t *texture_list[] = { tex_godwatbotBitmap, tex_subway01Bitmap, tex_subway02Bitmap,
+                                   tex_subway03Bitmap, tex_subway04Bitmap, tex_subway05Bitmap, tex_subway06Bitmap,
+                                   tex_subway07Bitmap, tex_subway08Bitmap, tex_subway09Bitmap, tex_subway10Bitmap,
+                                   tex_subway11Bitmap, tex_subway12Bitmap,
+                                   tex_subway13Bitmap, tex_subway14Bitmap, tex_subway15Bitmap,
+                                   tex_subway16Bitmap, tex_subway17Bitmap, tex_subway18Bitmap, 
+                                   tex_subway19Bitmap, tex_subway20Bitmap, tex_subway21Bitmap,
+                                   tex_litsphere2Bitmap, spr_logoBitmap, 
+                                   /*9*/scene1Bitmap, scene2Bitmap, scene3Bitmap, scene4Bitmap };
 
 extern uint16_t *framebuffer;
 extern uint16_t *backbuffer;
@@ -35,6 +41,13 @@ void clear_screen(uint8_t color)
 {
   fast_set(framebuffer, (color << 8)|(color), (VIEWPORT_WIDTH * VIEWPORT_HEIGHT) >> 1); 
 }
+
+void clear_buffers(uint8_t color)
+{
+  fast_set(framebuffer, (color << 8)|(color), (VIEWPORT_WIDTH * VIEWPORT_HEIGHT) >> 1); 
+  fast_set(backbuffer, (color << 8)|(color), (VIEWPORT_WIDTH * VIEWPORT_HEIGHT) >> 1); 
+}
+
 
 void set_camera_position(int16_t x, int16_t y, int16_t z)
 {
@@ -702,6 +715,7 @@ void IWRAM_CODE render(model_t *model)
   uint16_t triangle_index;
   for (i = 0; i < num_triangles; i++) {
     triangle_index = draw_order[i];
+
     rasterizer_func(&transformed_list[triangle_index]);
   }
 }

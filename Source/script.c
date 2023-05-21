@@ -2,25 +2,30 @@
 #include "script.h"
 #include "effects.h"
 
-#define NUM_EFFECTS 11
+// DENISE LINOLD
+#define NUM_EFFECTS 13
 
 uint16_t current_frame = 0;
 uint8_t current_effect = 0;
 
 extern uint16_t *framebuffer;
 
-const static struct scene_t scene_list[] = {
+const static struct scene_t scene_list[] = {  
   effect_underaudit,
   effect_spacewous, 
-  effect_credits,
+  effect_spacewous, 
+  effect_subway,  
   effect_spheredistort,
-  effect_tunnel,
-  effect_kaleido,
+  effect_spheredistort,
   effect_ball,
-  effect_quake,
+  effect_kaleido,
+  effect_greetings,
+  effect_greetings,
+  //effect_sky,
+  effect_tunnel,
   effect_planes,
-  effect_sky,
-  effect_object,
+  effect_end,
+
 };
 
 
@@ -58,5 +63,4 @@ void next_effect()
 
   scene_list[current_effect].init();
 
-  current_frame = 0;
 }

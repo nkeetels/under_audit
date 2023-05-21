@@ -358,6 +358,47 @@ void invert_palette(uint16_t *dest, const uint16_t *palette, uint8_t v)
   }
 }
 
+void scale_palette(uint16_t *dest, const uint16_t *palette, uint8_t v)
+{
+  uint16_t r, g, b, color;
+  uint16_t scale = v + 256;
+
+  for (uint16_t i = 0; i < 255; ++i)
+  {
+    color = *palette++;
+
+    r = (color >> 10) & 31;
+    g = (color >> 5) & 31;
+    b = color & 31; 
+
+    r = (r * (scale)) >> 8;
+    g = (g * (scale)) >> 8;
+    b = (b * (scale)) >> 8;
+
+    *dest++ = (r << 10) | (g << 5) | b;
+  }
+}
+
+void add_palette(uint16_t *dest, const uint16_t *palette, uint8_t v)
+{
+  uint16_t r, g, b, color;
+
+  for (uint16_t i = 0; i < 255; ++i)
+  {
+    color = *palette++;
+
+    r = (color >> 10) & 31;
+    g = (color >> 5) & 31;
+    b = color & 31; 
+
+    r += v;
+    g += v;
+    b += v;
+    
+    *dest++ = (r << 10) | (g << 5) | b;
+  }
+}
+/*
 void rotate_background(uint16_t angle)
 {
   int16_t pa, pb, pc, pd;
@@ -366,6 +407,19 @@ void rotate_background(uint16_t angle)
   REG_BG2PB = pb = -(sin(angle));
   REG_BG2PC = pc = (sin(angle));
   REG_BG2PD = pd = (cos(angle));
+
+  REG_BG2X = ((120 << 8) - (120 * pa + 80 * pb));
+  REG_BG2Y = ((80 << 8) - (120 * pc + 80 * pd));
+}
+*/
+void rotate_background(uint16_t angle, uint16_t zoom)
+{
+  int16_t pa, pb, pc, pd;
+
+  REG_BG2PA = pa = (cos(angle) * zoom) >> 8; 
+  REG_BG2PB = pb = -(sin(angle) * zoom) >> 8;
+  REG_BG2PC = pc = (sin(angle) * zoom) >> 8;
+  REG_BG2PD = pd = (cos(angle) * zoom) >> 8;
 
   REG_BG2X = ((120 << 8) - (120 * pa + 80 * pb));
   REG_BG2Y = ((80 << 8) - (120 * pc + 80 * pd));

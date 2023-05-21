@@ -9,6 +9,8 @@
 #define WIP
 #define WOBBLY
 
+static uint16_t spheredistort_frame = 0;
+
 void generate_palette()
 {
   for (int i = 0; i < 256; i++)
@@ -30,13 +32,15 @@ void generate_palette()
     g >>= 4;
     b >>= 4;
 
-    ((unsigned short*)0x5000000)[i] = (b << 10) | (g << 5) | r;   
+    generated_palette[i] = (b << 10) | (g << 5) | r;   
   }
 }
 
 void effect_spheredistort_init()
 {
+  clear_buffers(0);
   generate_palette();
+  set_palette(generated_palette);
 
 	clear_sprites();
 
@@ -57,11 +61,17 @@ void effect_spheredistort_init()
 
 void effect_spheredistort_destroy()
 {
+  /*
+  clear_sprites();
+  commit_sprites();
+*/
 }
 
 void effect_spheredistort_update(uint16_t *target, uint32_t frame, uint16_t sync)
 {
   clear_screen(0);
+
+  frame = spheredistort_frame++;
 
   int radius, i, x, y;
   int step = 360 >> 6;

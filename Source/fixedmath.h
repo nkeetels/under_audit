@@ -9,7 +9,7 @@ extern int16_t IWRAM_CODE _atan2(int a, int b);
 extern int16_t IWRAM_CODE _sqrt(int a);
 
 #define SINLUT_SIZE 255
-extern const int16_t SinLUT[];
+extern int16_t SinLUT[];
 extern const unsigned short lut_spherical[256];
 
 #define sin(x) SinLUT[x & SINLUT_SIZE]

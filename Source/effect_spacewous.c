@@ -9,39 +9,36 @@
 int fade_to_white = 0;
 #endif
 
+static uint16_t spacewous_frame = 0;
+
 void effect_spacewous_init()
 {
   set_palette(tex_godwatbotPal);
-return;
-	clear_sprites();
 
-  set_sprite_palette(spr_solarLogoPal);
-	set_sprite(0, (VIEWPORT_WIDTH>>1)-32, (VIEWPORT_HEIGHT>>1)-32, 64, 1, 1, spr_solarLogoTiles);
-
-
-  set_sprites_transparency(16);
-
-  commit_sprites();
+  for (int i = 1; i < 128; ++i) {
+    ((uint16_t*)0x5000200)[i] = (31 << 10) | (31 << 5) | 31;
+  }
 }
 
 void effect_spacewous_destroy()
 {
-  
+  clear_sprites();
+  commit_sprites();
 }
 
 void effect_spacewous_update(uint16_t *target, uint32_t frame, uint16_t sync)
 {
+  frame = spacewous_frame++;
 
-#if 1
   int fade_to_black = min(frame << 2, 255);
   fade_palette((unsigned short*)0x5000000, tex_godwatbotPal, 0, 0, 0, 255 - fade_to_black);
 
-  if (frame > 96) {
+  if (frame > 96*2+32) {
     fade_to_white += 14;
     fade_palette((unsigned short*)0x5000000, tex_godwatbotPal, 31, 31, 31, min(fade_to_white, 255));
-    set_sprites_transparency(16 - (fade_to_white >> 4));
   }
-#endif
+
+
 	int time = frame << 2;
 
   int x = (cos(time >> 1) >> 1);
@@ -49,12 +46,4 @@ void effect_spacewous_update(uint16_t *target, uint32_t frame, uint16_t sync)
 
 	int t = ((((time + x) & 0xFF) << 8) | ((time + y) & 0xFF)) & 0x7fff;
   move_table(target, (uint8_t*)tex_godwatbotBitmap, (uint16_t*)lut_sphere, 40+(x>>2), 80+(y>>2)-20, -t>>1);
-
-
-return;
-  int zoom = frame;
-  rotate_sprite(0, zoom<<1, 340-zoom, 340-zoom);
-  set_sprites_transparency(zoom);
-  commit_sprites();
-
 }

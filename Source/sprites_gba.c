@@ -17,7 +17,7 @@ uint32_t tile_address = 0;
 void set_sprites_transparency(int value)
 {
   REG_BLDCNT = GBA_ALPHA_BLEND;
-	REG_BLDALPHA = GBA_BLEND(16, clamp(value, 0, 16));
+	REG_BLDALPHA = GBA_BLEND(16, 16);// clamp(value, 0, 16));
 }
 
 void commit_sprites()

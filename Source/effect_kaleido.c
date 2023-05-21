@@ -4,8 +4,14 @@
 #include "fixedmath.h"
 #include "sprites.h"
 #include "assets.h"
+#include "sync.h"
 
 #define KALEIDO_SIDES 10
+
+int scale_timer = 0;
+int we_miss_you = 0;
+int another_fade = 0;
+uint8_t fade_me_out = 0;
 
 void effect_kaleido_init()
 {
@@ -21,10 +27,10 @@ void effect_kaleido_init()
     g += (SinLUT[offset] >> 2);
     b += (SinLUT[offset] >> 2);
 
-    ((unsigned short*)0x5000000)[i] = (b << 10) | (g << 5) | r;
+    generated_palette[i] = (b << 10) | (g << 5) | r;
   }
-
-  set_palette(golden_gradient);
+  set_palette(generated_palette);
+  //set_palette(golden_gradient);
 
   current_model.triangles = &triangle_list[0];
   for (int i = 0; i < KALEIDO_SIDES; i ++)
@@ -41,10 +47,23 @@ void effect_kaleido_init()
   camera_position.x = 0;
   camera_position.y = 0;
   camera_position.z = 64;
+
+  set_sprite_palette(spr_wemissyouPal);
+
+  int center_one = 120 - 32;
+  int center_teo = 120 - 64;
+
+  clear_sprites();
+  set_sprite(0, 120 - 32, 0, 64, 0, 0, spr_weTiles);
+  set_sprite(1, 120 - 32-32, 80-32, 64, 0, 0, spr_miss1Tiles);
+  set_sprite(2, 120 + 32-32, 80-32, 64, 0, 0, spr_miss2Tiles);
+  set_sprite(3, 120 - 32, 160-64, 64, 0, 0, spr_youTiles);
 }
 
 void effect_kaleido_destroy()
 {
+  clear_sprites();
+  commit_sprites();
 }
 
 void UpdateKaleidoscope(triangle_t f[], int sides, int time)
@@ -120,4 +139,23 @@ void effect_kaleido_update(uint16_t *target, uint32_t frame, uint16_t sync)
 
     texture_triangle(&t);
   }
+
+  if (sync < 56 && sync_trigger(kick_pattern, 10, sync+1)) {
+    //lut_offset += (rand() & 127);
+    scale_timer = 255;
+  }
+
+  if ((sync+1) == 0x32) {
+    fade_me_out = 1;
+    commit_sprites();
+  }
+  
+  if (fade_me_out) {
+    another_fade += 50;
+    fade_palette((unsigned short*)0x5000000, generated_palette, 0, 0, 0, min(another_fade, 255));
+  }
+
+  scale_timer -= 64;
+  scale_timer = max(0, scale_timer);
+  invert_palette((unsigned short*)0x5000000, generated_palette, scale_timer);
 }
