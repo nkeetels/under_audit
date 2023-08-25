@@ -1,6 +1,4 @@
-https://youtu.be/0xZZFCEGQIs?t=996
-
-[![VIDEO](https://raw.githubusercontent.com/nkeetels/under_audit/main/partyversion/00094446.gif)](https://youtu.be/0xZZFCEGQIs?t=996)
+[![](http://img.youtube.com/vi/6-0xZZFCEGQIs/0.jpg)](https://www.youtube.com/watch?t=996&v=0xZZFCEGQIs "")
 
 DENISE LINOLD
 
