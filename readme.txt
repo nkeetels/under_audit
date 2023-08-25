@@ -1,4 +1,4 @@
-[![](https://raw.githubusercontent.com/nkeetels/under_audit/main/partyversion/00094446.gif)](http://www.youtube.com/watch?t=996&v=0xZZFCEGQIs "")
+Watch on Youtube: https://www.youtube.com/watch?v=0xZZFCEGQIs&t=996s
 
 DENISE LINOLD
 
