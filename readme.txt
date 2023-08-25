@@ -1,4 +1,4 @@
-[![](https://raw.githubusercontent.com/nkeetels/under_audit/main/partyversion/00094446.gif)](https://www.youtube.com/watch?t=996&v=0xZZFCEGQIs "")
+[![](https://raw.githubusercontent.com/nkeetels/under_audit/main/partyversion/00094446.gif)](http://www.youtube.com/watch?t=996&v=0xZZFCEGQIs "")
 
 DENISE LINOLD
 
